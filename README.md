@@ -1,6 +1,6 @@
-# LearnSphere
+# CODES
 
-LearnSphere is a responsive course-platform demo built with Next.js, React, TypeScript and Tailwind CSS. It began as a course UI clone and has been rebuilt into a connected end-to-end portfolio project.
+CODES is a responsive course-platform demo built with Next.js, React, TypeScript and Tailwind CSS. It began as a course UI clone and has been rebuilt into a connected end-to-end portfolio project.
 
 ## Working flows
 
