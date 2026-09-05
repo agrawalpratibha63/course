@@ -1,2 +1,29 @@
-import Link from "next/link"; import { Bookmark,Star } from "lucide-react"; import { Course } from "./data/constant"; import { useApp } from "@/context/AppContext";
-export default function CourseCard({course}:{course:Course}){const{wishlist,toggleWishlist}=useApp();const saved=wishlist.includes(course.id);return <article className="group overflow-hidden rounded-xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl"><Link href={`/course/${course.id}`}><img src={course.image} alt="" className="h-44 w-full object-cover"/><div className="p-5"><p className="text-sm font-semibold text-blue-700">{course.provider}</p><h3 className="mt-2 min-h-12 text-lg font-bold group-hover:text-blue-700">{course.title}</h3><p className="mt-2 text-sm text-slate-600">{course.type} · {course.level}</p><div className="mt-4 flex items-center justify-between"><span className="flex items-center gap-1 font-bold">{course.rating}<Star size={16} className="fill-amber-400 text-amber-400"/></span><span className="text-sm text-slate-500">{course.timeline.split(" at ")[0]}</span></div></div></Link><button onClick={()=>toggleWishlist(course.id)} className="m-4 mt-0 flex items-center gap-2 text-sm font-semibold text-blue-700"><Bookmark size={17} className={saved?"fill-blue-700":""}/>{saved?"Saved":"Save course"}</button></article>}
+import Link from "next/link";
+import { Bookmark, CheckCircle2, Star } from "lucide-react";
+import { Course } from "./data/constant";
+import { useApp } from "@/context/AppContext";
+import { useOfflineCourses } from "@/lib/offline";
+
+export default function CourseCard({ course }: { course: Course }) {
+  const { wishlist, toggleWishlist } = useApp();
+  const saved = wishlist.includes(course.id);
+  const availableOffline = useOfflineCourses().some((item) => item.id === course.id);
+
+  return (
+    <article className="group overflow-hidden rounded-xl border bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-xl">
+      <Link href={`/course/${course.id}`}>
+        <div className="relative">
+          <img src={course.image} alt="" className="h-44 w-full object-cover" />
+          {availableOffline ? <span className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white shadow"><CheckCircle2 size={14} />Available Offline</span> : null}
+        </div>
+        <div className="p-5">
+          <p className="text-sm font-semibold text-blue-700">{course.provider}</p>
+          <h3 className="mt-2 min-h-12 text-lg font-bold group-hover:text-blue-700">{course.title}</h3>
+          <p className="mt-2 text-sm text-slate-600">{course.type} · {course.level}</p>
+          <div className="mt-4 flex items-center justify-between"><span className="flex items-center gap-1 font-bold">{course.rating}<Star size={16} className="fill-amber-400 text-amber-400" /></span><span className="text-sm text-slate-500">{course.timeline.split(" at ")[0]}</span></div>
+        </div>
+      </Link>
+      <button onClick={() => toggleWishlist(course.id)} className="m-4 mt-0 flex items-center gap-2 text-sm font-semibold text-blue-700"><Bookmark size={17} className={saved ? "fill-blue-700" : ""} />{saved ? "Saved" : "Save course"}</button>
+    </article>
+  );
+}
