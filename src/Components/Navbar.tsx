@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
-import { BookOpen, Menu, Search, X } from "lucide-react";
+import { BookOpen, Menu, Search, WifiOff, X } from "lucide-react";
 import { useApp } from "@/context/AppContext";
 import AuthModal from "./AuthModal";
 
@@ -14,9 +14,9 @@ export default function Navbar() {
       <Link href="/" className="flex shrink-0 items-center gap-2 text-lg font-black tracking-wide text-blue-700"><span className="grid h-8 w-8 place-items-center rounded-md bg-blue-700 text-white"><BookOpen size={17}/></span>CODES</Link>
       <Link href="/catalog" className="hidden rounded-md bg-blue-50 px-3 py-2 text-xs font-bold text-blue-800 md:block">Explore</Link>
       <form onSubmit={search} className="desktop-search min-w-0 max-w-lg flex-1"><input aria-label="Search courses" value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Search courses" className="min-w-0 w-full rounded-l-md border border-r-0 px-3 py-2 text-sm"/><button className="rounded-r-md bg-blue-700 px-3 text-white" aria-label="Search"><Search size={17}/></button></form>
-      <nav className="desktop-nav ml-auto items-center gap-3"><Link href="/catalog" className="text-xs font-semibold">Courses</Link>{user?<><Link href="/profile" className="rounded-md border px-3 py-2 text-xs font-semibold">{user.name.split(" ")[0]}</Link><button onClick={logout} className="text-xs font-semibold text-slate-600">Log out</button></>:<button onClick={()=>setAuth(true)} className="rounded-md bg-blue-700 px-3 py-2 text-xs font-bold text-white">Join free</button>}</nav>
+      <nav className="desktop-nav ml-auto items-center gap-3"><Link href="/catalog" className="text-xs font-semibold">Courses</Link><Link href="/offline" className="flex items-center gap-1 text-xs font-semibold"><WifiOff size={15}/>Offline</Link>{user?<><Link href="/profile" className="rounded-md border px-3 py-2 text-xs font-semibold">{user.name.split(" ")[0]}</Link><button onClick={logout} className="text-xs font-semibold text-slate-600">Log out</button></>:<button onClick={()=>setAuth(true)} className="rounded-md bg-blue-700 px-3 py-2 text-xs font-bold text-white">Join free</button>}</nav>
       <button onClick={()=>setMobile(!mobile)} className="mobile-trigger ml-auto" aria-label="Toggle navigation">{mobile?<X size={21}/>:<Menu size={21}/>}</button>
     </div>
-    {mobile?<div className="space-y-3 border-t p-4 text-sm md:hidden"><Link onClick={()=>setMobile(false)} href="/catalog" className="block font-semibold">Explore courses</Link><Link onClick={()=>setMobile(false)} href="/profile" className="block font-semibold">My learning</Link>{user?<button onClick={()=>{logout();setMobile(false)}} className="font-semibold">Log out</button>:<button onClick={()=>{setMobile(false);setAuth(true)}} className="w-full rounded-md bg-blue-700 py-2 font-bold text-white">Join free</button>}</div>:null}
+    {mobile?<div className="space-y-3 border-t p-4 text-sm md:hidden"><Link onClick={()=>setMobile(false)} href="/catalog" className="block font-semibold">Explore courses</Link><Link onClick={()=>setMobile(false)} href="/offline" className="block font-semibold">Offline library</Link><Link onClick={()=>setMobile(false)} href="/profile" className="block font-semibold">My learning</Link>{user?<button onClick={()=>{logout();setMobile(false)}} className="font-semibold">Log out</button>:<button onClick={()=>{setMobile(false);setAuth(true)}} className="w-full rounded-md bg-blue-700 py-2 font-bold text-white">Join free</button>}</div>:null}
   </header>{auth?<AuthModal onClose={()=>setAuth(false)}/>:null}</>;
 }
