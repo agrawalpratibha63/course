@@ -33,6 +33,7 @@ export default function CoursePage() {
     toggleModule,
     wishlist,
     toggleWishlist,
+    recordActivity,
   } = useApp();
   const [auth, setAuth] = useState(false),
     [active, setActive] = useState(0),
@@ -42,6 +43,9 @@ export default function CoursePage() {
     const timer = setTimeout(() => setCelebrate(false), 4000);
     return () => clearTimeout(timer);
   }, [celebrate]);
+  useEffect(() => {
+    if (user && course) recordActivity();
+  }, [user, course, recordActivity]);
   if (!course)
     return (
       <main className="grid min-h-[60vh] place-items-center">
