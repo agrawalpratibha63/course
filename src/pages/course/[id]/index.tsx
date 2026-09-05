@@ -15,6 +15,7 @@ import { useApp } from "@/context/AppContext";
 import AuthModal from "@/Components/AuthModal";
 import CompletionCelebration from "@/Components/CompletionCelebration";
 import OfflineCourseButton from "@/Components/OfflineCourseButton";
+import CourseReminder from "@/Components/CourseReminder";
 function embed(id: string) {
   const match = id.match(/(?:youtu\.be\/|v=)?([\w-]{11})/);
   return match
@@ -214,6 +215,12 @@ export default function CoursePage() {
                   <p className="mt-2 text-sm font-semibold">
                     {percent}% complete
                   </p>
+                  {percent < 100 ? (
+                    <CourseReminder
+                      courseId={course.id}
+                      courseTitle={course.title}
+                    />
+                  ) : null}
                 </>
               ) : (
                 <>
