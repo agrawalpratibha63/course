@@ -7,6 +7,8 @@ import {
   useMemo,
   useState,
 } from "react";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { firebaseAuth } from "@/lib/firebase";
 export type User = { name: string; email: string; headline: string };
 type Progress = Record<string, number[]>;
 export type LearningStreak = {
@@ -93,6 +95,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   }, []);
   useEffect(() => {
+    if (!firebaseAuth) return;
+    return onAuthStateChanged(firebaseAuth, (account) => {
+      setUser(
+        account
+          ? {
+              name: account.displayName || "Learner",
+              email: account.email || "",
+              headline: "Lifelong learner",
+            }
+          : null,
+      );
+    });
+  }, []);
+  useEffect(() => {
     if (!ready) return;
     localStorage.setItem("ls-user", JSON.stringify(user));
     localStorage.setItem("ls-enrolled", JSON.stringify(enrolled));
@@ -116,7 +132,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
         });
         recordActivity();
       },
-      logout: () => setUser(null),
+      logout: () => {
+        if (firebaseAuth) void signOut(firebaseAuth);
+        setUser(null);
+      },
       updateProfile: (u) => setUser((c) => (c ? { ...c, ...u } : c)),
       enroll: (id) => {
         setEnrolled((a) => (a.includes(id) ? a : [...a, id]));
